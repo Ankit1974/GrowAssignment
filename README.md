@@ -36,11 +36,6 @@ A modern React Native application for tracking stock market data with real-time 
    npm install
    ```
 
-3. **Setup environment**
-   ```bash
-   npm run setup
-   ```
-
 4. **Add API Key**
    Create `.env` file in root directory:
    ```
