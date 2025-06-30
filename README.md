@@ -168,6 +168,17 @@ cd android
 cd ios
 xcodebuild -workspace GrowAssignment.xcworkspace -scheme GrowAssignment -configuration Release
 ```
+### Release APKs
+
+You can download the latest release APKs for Android below:
+
+- [Universal Release APK (all devices)](android/app/build/outputs/apk/release/app-universal-release.apk)
+- [ARM64-v8a Release APK](android/app/build/outputs/apk/release/app-arm64-v8a-release.apk)
+- [armeabi-v7a Release APK](android/app/build/outputs/apk/release/app-armeabi-v7a-release.apk)
+- [x86 Release APK](android/app/build/outputs/apk/release/app-x86-release.apk)
+- [x86_64 Release APK](android/app/build/outputs/apk/release/app-x86_64-release.apk)
+
+> **Note:** These APKs are release builds optimized for production use.
 
 ## 🆘 Troubleshooting
 
