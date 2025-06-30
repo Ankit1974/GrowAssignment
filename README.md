@@ -155,17 +155,6 @@ The app supports both light and dark themes:
 | Android | API 21 (5.0) | Latest stable |
 | iOS | 12.0 | Latest stable |
 
-## 🧪 Testing
-
-```bash
-npm test
-```
-
-Includes:
-- Unit tests for components
-- Integration tests for API
-- Performance monitoring
-
 ## 🚀 Build & Deploy
 
 ### Android
@@ -179,18 +168,6 @@ cd android
 cd ios
 xcodebuild -workspace GrowAssignment.xcworkspace -scheme GrowAssignment -configuration Release
 ```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🆘 Troubleshooting
 
@@ -217,14 +194,6 @@ cd ios && pod install
 - 🐛 Create an issue in this repository
 - 💬 Ask questions in the discussions
 
-## 🔮 Roadmap
-
-- [ ] Real-time WebSocket updates
-- [ ] Push notifications for price alerts
-- [ ] Portfolio tracking
-- [ ] Advanced charting features
-- [ ] Offline mode support
-- [ ] Multi-language support
 
 ---
 
