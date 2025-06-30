@@ -7,12 +7,25 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "setup": "node scripts/setup-env.js"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native/new-app-screen": "0.80.0",
+    "@react-navigation/bottom-tabs": "^7.4.2",
+    "@react-navigation/native": "^7.1.14",
+    "@react-navigation/native-stack": "^7.3.21",
+    "@react-navigation/stack": "^7.4.2",
     "react": "19.1.0",
     "react-native": "0.80.0",
-    "@react-native/new-app-screen": "0.80.0"
+    "react-native-chart-kit": "^6.12.0",
+    "react-native-gesture-handler": "^2.26.0",
+    "react-native-linear-gradient": "^2.8.3",
+    "react-native-safe-area-context": "^5.5.0",
+    "react-native-screens": "^4.11.1",
+    "react-native-svg": "^15.12.0",
+    "react-native-vector-icons": "^10.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

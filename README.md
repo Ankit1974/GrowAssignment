@@ -1,97 +1,233 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 📈 GrowAssignment - Stock Market App
 
-# Getting Started
+A modern React Native application for tracking stock market data with real-time updates, watchlist management, and beautiful UI.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+![React Native](https://img.shields.io/badge/React%20Native-0.80.0-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0.4-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-## Step 1: Start Metro
+## ✨ Features
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+- 📊 **Real-time Stock Data** - Top gainers and losers from Alpha Vantage API
+- 🔍 **Smart Search** - Debounced search with local + API results
+- 📋 **Watchlist Management** - Create and manage multiple watchlists
+- 📱 **Stock Details** - Interactive charts and detailed information
+- 🌙 **Dark/Light Theme** - Smooth theme switching
+- ⚡ **Performance Optimized** - Fast scrolling and efficient data loading
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+## 🚀 Quick Start
 
-```sh
-# Using npm
-npm start
+### Prerequisites
 
-# OR using Yarn
-yarn start
+- Node.js >= 18
+- React Native CLI
+- Android Studio (Android) / Xcode (iOS)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd GrowAssignment
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Setup environment**
+   ```bash
+   npm run setup
+   ```
+
+4. **Add API Key**
+   Create `.env` file in root directory:
+   ```
+   ALPHA_VANTAGE_API_KEY=your_api_key_here
+   ```
+   
+   Get your free API key from [Alpha Vantage](https://www.alphavantage.co/support/#api-key)
+
+5. **Run the app**
+
+   **Android:**
+   ```bash
+   npm run android
+   ```
+
+   **iOS:**
+   ```bash
+   npm run ios
+   ```
+
+   **Start Metro:**
+   ```bash
+   npm start
+   ```
+
+## 📱 Screens
+
+| Screen | Purpose | Key Features |
+|--------|---------|--------------|
+| **Explore** | Main discovery screen | Search, Top Gainers/Losers, Real-time data |
+| **Top Gainers** | Best performing stocks | Grid layout, Price updates, Navigation |
+| **Top Losers** | Worst performing stocks | Grid layout, Price updates, Navigation |
+| **Stock Details** | Individual stock view | Charts, Add to watchlist, Company info |
+| **Watchlist** | Manage watchlists | Multiple lists, Persistent storage |
+| **Watchlist Details** | View watchlist stocks | Add/remove stocks, Performance tracking |
+| **Add to Watchlist** | Modal for adding stocks | Create new or select existing watchlist |
+
+## 🏗️ Project Structure
+
+```
+src/
+├── components/          # Reusable components
+│   └── StockCard.tsx   # Stock display card
+├── navigation/         # Navigation setup
+│   ├── TabNavigator.tsx
+│   ├── ExploreStack.tsx
+│   └── WatchlistStack.tsx
+├── screens/            # All app screens
+├── services/           # API and data services
+│   └── api.ts         # Alpha Vantage API integration
+├── theme.ts           # Theme definitions
+├── ThemeContext.tsx   # Theme management
+└── utils/             # Performance utilities
 ```
 
-## Step 2: Build and run your app
+## 🛠️ Tech Stack
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+- **React Native** 0.80.0
+- **React** 19.1.0
+- **TypeScript** 5.0.4
+- **React Navigation** v7
+- **Alpha Vantage API** - Stock market data
+- **AsyncStorage** - Local data persistence
+- **React Native Chart Kit** - Stock charts
+
+## 🔧 Available Scripts
+
+```bash
+npm start          # Start Metro bundler
+npm run android    # Run on Android
+npm run ios        # Run on iOS
+npm run setup      # Setup environment
+npm test           # Run tests
+npm run lint       # Lint code
+```
+
+## 📊 API Integration
+
+The app uses **Alpha Vantage API** for real-time stock data:
+
+- **TOP_GAINERS_LOSERS** - Fetch top gainers and losers
+- **SYMBOL_SEARCH** - Search for stocks
+- **TIME_SERIES_DAILY** - Historical data for charts
+
+### API Features
+- ✅ Error handling with retry logic
+- ✅ Data validation
+- ✅ Rate limiting protection
+- ✅ Request timeout management
+
+## 🎨 Theming
+
+The app supports both light and dark themes:
+
+- **Light Theme**: Clean white backgrounds, dark text
+- **Dark Theme**: Dark backgrounds, light text
+- **Dynamic Switching**: Toggle themes at runtime
+- **Context-based**: React Context for theme management
+
+## ⚡ Performance Optimizations
+
+- **React.memo** - Prevents unnecessary re-renders
+- **useCallback/useMemo** - Function and value memoization
+- **FlatList optimizations** - getItemLayout, removeClippedSubviews
+- **Debounced search** - Reduces API calls
+- **Parallel API requests** - Faster data loading
+
+## 📱 Platform Support
+
+| Platform | Minimum Version | Target Version |
+|----------|----------------|----------------|
+| Android | API 21 (5.0) | Latest stable |
+| iOS | 12.0 | Latest stable |
+
+## 🧪 Testing
+
+```bash
+npm test
+```
+
+Includes:
+- Unit tests for components
+- Integration tests for API
+- Performance monitoring
+
+## 🚀 Build & Deploy
 
 ### Android
-
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```bash
+cd android
+./gradlew assembleRelease
 ```
 
 ### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+```bash
+cd ios
+xcodebuild -workspace GrowAssignment.xcworkspace -scheme GrowAssignment -configuration Release
 ```
 
-Then, and every time you update your native dependencies, run:
+## 🤝 Contributing
 
-```sh
-bundle exec pod install
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Troubleshooting
+
+### Common Issues
+
+**Metro bundler issues:**
+```bash
+npx react-native start --reset-cache
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+**Android build issues:**
+```bash
+cd android && ./gradlew clean
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+**iOS build issues:**
+```bash
+cd ios && pod install
+```
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+### Getting Help
 
-## Step 3: Modify your app
+- 📖 Check the [React Native docs](https://reactnative.dev/docs/getting-started)
+- 🐛 Create an issue in this repository
+- 💬 Ask questions in the discussions
 
-Now that you have successfully run the app, let's make changes!
+## 🔮 Roadmap
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+- [ ] Real-time WebSocket updates
+- [ ] Push notifications for price alerts
+- [ ] Portfolio tracking
+- [ ] Advanced charting features
+- [ ] Offline mode support
+- [ ] Multi-language support
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+---
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+**Made with ❤️ using React Native**
 
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+⭐ **Star this repository if you found it helpful!**
