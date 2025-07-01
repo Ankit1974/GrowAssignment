@@ -194,13 +194,21 @@ cd android && ./gradlew clean
 cd ios && pod install
 ```
 
-![WhatsApp Image 2025-07-01 at 09 52 01_7035a9fa](https://github.com/user-attachments/assets/971fa89b-8de9-4f27-9c25-5d4f3bcaa86b)
-![WhatsApp Image 2025-07-01 at 09 53 35_31ffb359](https://github.com/user-attachments/assets/8ad48489-c1c1-4b6e-9cd3-e2e5157ca4a0)
-![WhatsApp Image 2025-07-01 at 09 54 26_67a3b651](https://github.com/user-attachments/assets/631353f3-a8a7-4090-ab1c-94af47774d80)
-![WhatsApp Image 2025-07-01 at 09 55 22_48fc9c7f](https://github.com/user-attachments/assets/418889a4-8852-41fb-bc69-df2689bf0ef7)
-![WhatsApp Image 2025-07-01 at 09 55 43_05623ba9](https://github.com/user-attachments/assets/3e4519fb-e6cd-4278-b54c-f9da61fd6dca)
-![WhatsApp Image 2025-07-01 at 09 56 16_a3b9cc1e](https://github.com/user-attachments/assets/607c777f-573a-4be6-8d1b-e1e1f4765b82)
-![WhatsApp Image 2025-07-01 at 09 56 37_f9f5e0a5](https://github.com/user-attachments/assets/6d86fb05-7294-4ad2-90a1-46479426dd15)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/971fa89b-8de9-4f27-9c25-5d4f3bcaa86b" width="200" />
+  <img src="https://github.com/user-attachments/assets/8ad48489-c1c1-4b6e-9cd3-e2e5157ca4a0" width="200" />
+  <img src="https://github.com/user-attachments/assets/631353f3-a8a7-4090-ab1c-94af47774d80" width="200" />
+  <img src="https://github.com/user-attachments/assets/418889a4-8852-41fb-bc69-df2689bf0ef7" width="200" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/3e4519fb-e6cd-4278-b54c-f9da61fd6dca" width="200" />
+  <img src="https://github.com/user-attachments/assets/607c777f-573a-4be6-8d1b-e1e1f4765b82" width="200" />
+   <img src="https://github.com/user-attachments/assets/6d86fb05-7294-4ad2-90a1-46479426dd15" width="200" />
+</p>
+
+
+
 
 
 
