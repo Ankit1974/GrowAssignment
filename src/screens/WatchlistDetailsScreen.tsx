@@ -14,6 +14,7 @@ import type { RouteProp } from '@react-navigation/native';
 import { WatchlistStackParamList } from '../types/navigation';
 import StockCard from '../components/StockCard';
 import { useTheme } from '../ThemeContext';
+import { ENV } from '../config/environment';
 
 // Key used to store watchlists in device storage
 const STORAGE_KEY = 'watchlists';
@@ -217,7 +218,7 @@ const WatchlistDetailsScreen = () => {
       for (const symbol of symbols) {
         try {
           // API to get stock overview
-          const res = await fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=0R4ZAFUAZRT2X4ZX`);
+          const res = await fetch(`https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${ENV.ALPHA_VANTAGE_API_KEY}`);
           const data = await res.json();
           
           // Add stock data to results

@@ -37,19 +37,19 @@ A modern React Native application for tracking stock market data with real-time 
    ```
 
 3. **Setup environment**
+   
+   Create a `.env` file in the root directory with your API key:
    ```bash
-   npm run setup
-   ```
-
-4. **Add API Key**
-   Create `.env` file in root directory:
-   ```
-   ALPHA_VANTAGE_API_KEY=your_api_key_here
+   # Create .env file
+   echo "ALPHA_VANTAGE_API_KEY=your_actual_api_key_here" > .env
    ```
    
-   Get your free API key from [Alpha Vantage](https://www.alphavantage.co/support/#api-key)
+   Or manually create `.env` file and add:
+   ```
+   ALPHA_VANTAGE_API_KEY=your_actual_api_key_here
+   ```
 
-5. **Run the app**
+4. **Run the app**
 
    **Android:**
    ```bash
@@ -112,7 +112,6 @@ src/
 npm start          # Start Metro bundler
 npm run android    # Run on Android
 npm run ios        # Run on iOS
-npm run setup      # Setup environment
 npm test           # Run tests
 npm run lint       # Lint code
 ```
@@ -130,6 +129,27 @@ The app uses **Alpha Vantage API** for real-time stock data:
 - ✅ Data validation
 - ✅ Rate limiting protection
 - ✅ Request timeout management
+
+## 🔒 Security
+
+### API Key Management
+- **Environment Variables**: All API keys are stored in environment variables
+- **No Hardcoded Keys**: The app never contains hardcoded API keys in source code
+- **Git Ignore**: `.env` files are automatically ignored by Git
+- **Validation**: API key format is validated at runtime
+
+### Best Practices
+- ✅ Use environment variables for sensitive data
+- ✅ Never commit API keys to version control
+- ✅ Use different keys for development and production
+- ✅ Monitor API usage and rate limits
+- ✅ Validate API responses before processing
+
+### Security Features
+- **Input Validation**: All user inputs are validated
+- **Error Handling**: Secure error messages that don't expose sensitive data
+- **Data Sanitization**: API responses are validated and sanitized
+- **Timeout Protection**: API requests have timeout limits
 
 ## 🎨 Theming
 
@@ -225,6 +245,30 @@ cd ios && pod install
 - [ ] Advanced charting features
 - [ ] Offline mode support
 - [ ] Multi-language support
+
+## 📦 Download APKs
+
+You can download the latest debug APKs for Android below:
+
+- [Universal APK (all devices)](android/app/build/outputs/apk/debug/app-universal-debug.apk)
+- [ARM64-v8a APK](android/app/build/outputs/apk/debug/app-arm64-v8a-debug.apk)
+- [armeabi-v7a APK](android/app/build/outputs/apk/debug/app-armeabi-v7a-debug.apk)
+- [x86 APK](android/app/build/outputs/apk/debug/app-x86-debug.apk)
+- [x86_64 APK](android/app/build/outputs/apk/debug/app-x86_64-debug.apk)
+
+> **Note:** These APKs are debug builds. For production, generate a release APK using the instructions in the Build & Deploy section.
+
+### Release APKs
+
+You can download the latest release APKs for Android below:
+
+- [Universal Release APK (all devices)](android/app/build/outputs/apk/release/app-universal-release.apk)
+- [ARM64-v8a Release APK](android/app/build/outputs/apk/release/app-arm64-v8a-release.apk)
+- [armeabi-v7a Release APK](android/app/build/outputs/apk/release/app-armeabi-v7a-release.apk)
+- [x86 Release APK](android/app/build/outputs/apk/release/app-x86-release.apk)
+- [x86_64 Release APK](android/app/build/outputs/apk/release/app-x86_64-release.apk)
+
+> **Note:** These APKs are release builds optimized for production use.
 
 ---
 

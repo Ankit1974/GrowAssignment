@@ -8,184 +8,186 @@ import { useTheme } from '../ThemeContext';
 import { ExploreStackParamList } from '../types/navigation';
 import LinearGradient from 'react-native-linear-gradient';
 import { ENV } from '../config/environment';
-// import { LineChart } from 'react-native-svg-charts';
 
-// ============================================================================
-// TYPES AND INTERFACES
-// ============================================================================
 
-/**
- * Interface for stock overview data returned from Alpha Vantage API
- * Contains all the fundamental information about a stock
- */
+
+ //Interface for stock overview data returned from Alpha Vantage API
+
 interface StockDetails {
-  Symbol: string;           // Stock symbol (e.g., AAPL)
-  Name: string;             // Company name (e.g., Apple Inc.)
-  Exchange: string;         // Stock exchange (e.g., NASDAQ)
-  Country: string;          // Company country
-  Description: string;      // Company description
-  Industry: string;         // Industry classification
-  Sector: string;           // Sector classification
-  '50DayMovingAverage': string;  // 50-day moving average price
-  '52WeekLow': string;      // 52-week low price
-  '52WeekHigh': string;     // 52-week high price
-  MarketCapitalization: string;  // Market cap in USD
-  PERatio: string;          // Price-to-Earnings ratio
-  Beta: string;             // Beta coefficient (volatility measure)
-  DividendYield: string;    // Dividend yield percentage
-  ProfitMargin: string;     // Profit margin percentage
-  ReturnOnEquityTTM: string; // Return on equity (trailing twelve months)
+  Symbol: string;           
+  Name: string;             
+  Exchange: string;         
+  Country: string;          
+  Description: string;      
+  Industry: string;         
+  Sector: string;           
+  '50DayMovingAverage': string;  
+  '52WeekLow': string;      
+  '52WeekHigh': string;     
+  MarketCapitalization: string;  
+  PERatio: string;          
+  Beta: string;             
+  DividendYield: string;    
+  ProfitMargin: string;    
+  ReturnOnEquityTTM: string; 
 }
 
-/**
- * Configuration for different chart time ranges
- * Maps to Alpha Vantage API parameters
- */
+ // Configuration for different chart time ranges
 interface ChartConfig {
-  function: string;         // API function name (TIME_SERIES_INTRADAY, TIME_SERIES_DAILY)
-  interval: string;         // Time interval for intraday data (5min, 15min, etc.)
+  function: string;         // API function 
+  interval: string;         // Time interval for intraday data 
   dataPoints: number;       // Number of data points to fetch
 }
 
-/**
- * Time range options for chart display
- * Used for UI buttons and data fetching
- */
-interface TimeRange {
-  label: string;            // Display label (1D, 1W, etc.)
-  value: string;            // Human readable value (1 Day, 1 Week, etc.)
-  index: number;            // Array index for mapping to chart configs
-}
 
-// ============================================================================
-// CONSTANTS AND CONFIGURATION
-// ============================================================================
+// Time range options for chart display
+interface TimeRange {
+  label: string;            // Display label
+  value: string;            // Human readable value 
+  index: number;            // Array index for mapping to chart conf
+}
 
 // Alpha Vantage API configuration
 const API_BASE_URL = 'https://www.alphavantage.co/query';
-const API_KEY = ENV.ALPHA_VANTAGE_API_KEY; // Get API key from environment variables
+const API_KEY = ENV.ALPHA_VANTAGE_API_KEY; // API key from environment variables
 
-// Validate API key and warn if using demo key
-if (!API_KEY || API_KEY === 'demo') {
-  console.warn('Warning: Using demo API key. Please set ALPHA_VANTAGE_API_KEY in your environment variables.');
+// Validate API key and warn if missing
+if (!API_KEY) {
+  console.warn('Warning: No API key set. Please set ALPHA_VANTAGE_API_KEY in your environment variables.');
 }
 
-/**
- * Available time ranges for chart display
- * Each range maps to a specific chart configuration
- */
+
+ // Available time ranges for chart display
 const TIME_RANGES: TimeRange[] = [
-  { label: '1D', value: '1 Day', index: 0 },      // Intraday data
-  { label: '1W', value: '1 Week', index: 1 },     // 7 days of daily data
-  { label: '1M', value: '1 Month', index: 2 },    // 30 days of daily data
-  { label: '3M', value: '3 Months', index: 3 },   // 90 days of daily data
-  { label: '6M', value: '6 Months', index: 4 },   // 180 days of daily data
-  { label: '1Y', value: '1 Year', index: 5 },     // 365 days of daily data
+  { label: '1D', value: '1 Day', index: 0 },     
+  { label: '1W', value: '1 Week', index: 1 },     
+  { label: '1M', value: '1 Month', index: 2 },    
+  { label: '3M', value: '3 Months', index: 3 },   
+  { label: '6M', value: '6 Months', index: 4 },   
+  { label: '1Y', value: '1 Year', index: 5 },     
 ];
 
-/**
- * Chart configurations for each time range
- * Maps to Alpha Vantage API functions and parameters
- */
+ // Chart configurations for each time range
+ 
 const CHART_CONFIGS: ChartConfig[] = [
-  { function: 'TIME_SERIES_INTRADAY', interval: '5min', dataPoints: 78 },  // 1D: 5-min intervals
-  { function: 'TIME_SERIES_DAILY', interval: '', dataPoints: 7 },          // 1W: 7 days
-  { function: 'TIME_SERIES_DAILY', interval: '', dataPoints: 30 },         // 1M: 30 days
-  { function: 'TIME_SERIES_DAILY', interval: '', dataPoints: 90 },         // 3M: 90 days
-  { function: 'TIME_SERIES_DAILY', interval: '', dataPoints: 180 },        // 6M: 180 days
-  { function: 'TIME_SERIES_DAILY', interval: '', dataPoints: 365 },        // 1Y: 365 days
+  { function: 'TIME_SERIES_INTRADAY', interval: '5min', dataPoints: 78 },  
+  { function: 'TIME_SERIES_DAILY', interval: '', dataPoints: 7 },          
+  { function: 'TIME_SERIES_DAILY', interval: '', dataPoints: 30 },         
+  { function: 'TIME_SERIES_DAILY', interval: '', dataPoints: 90 },         
+  { function: 'TIME_SERIES_DAILY', interval: '', dataPoints: 180 },        
+  { function: 'TIME_SERIES_DAILY', interval: '', dataPoints: 365 },        
 ];
 
-// ============================================================================
-// UTILITY FUNCTIONS
-// ============================================================================
-
-/**
- * Formats market capitalization to human-readable format
- * Converts large numbers to T (trillion), B (billion), M (million)
- * 
- * @param marketCap - Market cap as string from API
- * @returns Formatted string (e.g., "2.5T", "1.2B", "500M")
- */
+// Formats market capitalization to human-readable format
 const formatMarketCap = (marketCap: string): string => {
   if (!marketCap) return '-';
   const num = parseFloat(marketCap);
-  if (num >= 1e12) return `${(num / 1e12).toFixed(1)}T`;  // Trillion
-  if (num >= 1e9) return `${(num / 1e9).toFixed(1)}B`;    // Billion
-  if (num >= 1e6) return `${(num / 1e6).toFixed(1)}M`;    // Million
+  if (num >= 1e12) return `${(num / 1e12).toFixed(1)}T`;  
+  if (num >= 1e9) return `${(num / 1e9).toFixed(1)}B`;   
+  if (num >= 1e6) return `${(num / 1e6).toFixed(1)}M`;    
   return marketCap;
 };
 
-/**
- * Formats percentage values with 2 decimal places
- * 
- * @param value - Percentage value as string
- * @returns Formatted percentage string (e.g., "2.50%")
- */
+
+// Formats percentage values with 2 decimal places
+ 
 const formatPercentage = (value: string): string => {
   if (!value) return '-';
   const num = parseFloat(value);
   return `${num.toFixed(2)}%`;
 };
 
-// ============================================================================
-// API SERVICE
-// ============================================================================
 
-// Simple in-memory cache to avoid duplicate API calls
+// API SERVICE
+
+// cache to avoid duplicate API calls
 const cache = new Map();
 
-/**
- * Fetches stock overview data from Alpha Vantage API
- * This function handles the API call and error handling for stock details
- * 
- * @param symbol - Stock symbol (e.g., AAPL)
- * @returns Promise with stock details data
- */
+ // Fetches stock overview data from Alpha Vantage API
+ 
 const fetchData = async (symbol: string): Promise<StockDetails> => {
   try {
+    console.log(`[StockDetailsScreen] Fetching stock overview for symbol: ${symbol}`);
+    console.log(`[StockDetailsScreen] API Key available: ${!!API_KEY}`);
+    console.log(`[StockDetailsScreen] API Key starts with: ${API_KEY ? API_KEY.substring(0, 4) + '...' : 'N/A'}`);
+    
     const url = `${API_BASE_URL}?function=OVERVIEW&symbol=${symbol}&apikey=${API_KEY}`;
+    console.log(`[StockDetailsScreen] API URL: ${url.replace(API_KEY, '***')}`);
+    
     const response = await fetch(url);
+    console.log(`[StockDetailsScreen] API Response status: ${response.status}`);
+    console.log(`[StockDetailsScreen] API Response ok: ${response.ok}`);
     
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     
     const data = await response.json();
+    console.log(`[StockDetailsScreen] API Response data keys:`, Object.keys(data));
+    console.log(`[StockDetailsScreen] API Response data preview:`, {
+      Symbol: data.Symbol,
+      Name: data.Name,
+      Exchange: data.Exchange,
+      Country: data.Country,
+      Description: data.Description ? data.Description.substring(0, 100) + '...' : 'No description',
+      Industry: data.Industry,
+      Sector: data.Sector,
+      '50DayMovingAverage': data['50DayMovingAverage'],
+      '52WeekLow': data['52WeekLow'],
+      '52WeekHigh': data['52WeekHigh'],
+      MarketCapitalization: data.MarketCapitalization,
+      PERatio: data.PERatio,
+      Beta: data.Beta,
+      DividendYield: data.DividendYield,
+      ProfitMargin: data.ProfitMargin,
+      ReturnOnEquityTTM: data.ReturnOnEquityTTM,
+    });
     
-    // Check for API errors (Alpha Vantage returns errors in specific fields)
+    // Check for API errors 
     if (data['Error Message'] || data['Note']) {
+      console.error(`[StockDetailsScreen] API Error:`, data['Error Message'] || data['Note']);
       throw new Error(data['Error Message'] || data['Note']);
     }
     
+    // Check if we have valid data
+    if (!data.Symbol || !data.Name) {
+      console.warn(`[StockDetailsScreen] Missing required data fields:`, {
+        hasSymbol: !!data.Symbol,
+        hasName: !!data.Name,
+        symbol: data.Symbol,
+        name: data.Name
+      });
+    }
+    
+    console.log(`[StockDetailsScreen] Successfully fetched stock overview data`);
     return data as StockDetails;
   } catch (error) {
+    console.error(`[StockDetailsScreen] Error fetching stock overview:`, error);
     throw new Error(`Failed to fetch stock overview: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 };
 
-/**
- * API service object containing methods for fetching stock data
- * Includes caching to improve performance and reduce API calls
- */
+
+ //API service object containing methods for fetching stock data
 const stockApiService = {
-  /**
-   * Fetches stock overview data with caching
-   * Returns cached data if available, otherwise fetches from API
-   * 
-   * @param symbol - Stock symbol
-   * @returns Promise with stock details
-   */
+
+   //Fetches stock overview data with caching
   async fetchStockOverview(symbol: string): Promise<StockDetails> {
     const cacheKey = `overview_${symbol}`;
+    console.log(`[StockDetailsScreen] fetchStockOverview called for symbol: ${symbol}`);
+    console.log(`[StockDetailsScreen] Cache key: ${cacheKey}`);
+    console.log(`[StockDetailsScreen] Cache has data: ${cache.has(cacheKey)}`);
     
     // Return cached data if available
     if (cache.has(cacheKey)) {
+      console.log(`[StockDetailsScreen] Returning cached data for ${symbol}`);
       return cache.get(cacheKey);
     }
     
+    console.log(`[StockDetailsScreen] No cached data found, fetching from API for ${symbol}`);
     // Fetch new data and cache it
     const data = await fetchData(symbol);
+    console.log(`[StockDetailsScreen] Caching data for ${symbol}`);
     cache.set(cacheKey, data);
     return data;
   },
@@ -193,13 +195,12 @@ const stockApiService = {
   /**
    * Fetches chart data for a specific time range
    * Handles different API functions (intraday vs daily) and data processing
-   * 
-   * @param symbol - Stock symbol
-   * @param config - Chart configuration (time range, interval, etc.)
-   * @returns Promise with array of price data points
    */
   async fetchChartData(symbol: string, config: ChartConfig): Promise<number[]> {
     try {
+      console.log(`[StockDetailsScreen] fetchChartData called for symbol: ${symbol}`);
+      console.log(`[StockDetailsScreen] Chart config:`, config);
+      
       // Build API URL based on configuration
       let url = `${API_BASE_URL}?function=${config.function}&symbol=${symbol}&apikey=${API_KEY}`;
       
@@ -208,15 +209,22 @@ const stockApiService = {
         url += `&interval=${config.interval}`;
       }
 
+      console.log(`[StockDetailsScreen] Chart API URL: ${url.replace(API_KEY, '***')}`);
+      
       const response = await fetch(url);
+      console.log(`[StockDetailsScreen] Chart API Response status: ${response.status}`);
+      console.log(`[StockDetailsScreen] Chart API Response ok: ${response.ok}`);
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
       const data = await response.json();
+      console.log(`[StockDetailsScreen] Chart API Response data keys:`, Object.keys(data));
       
       // Check for API errors
       if (data['Error Message'] || data['Note']) {
+        console.error(`[StockDetailsScreen] Chart API Error:`, data['Error Message'] || data['Note']);
         throw new Error(data['Error Message'] || data['Note']);
       }
       
@@ -225,6 +233,10 @@ const stockApiService = {
       // Process intraday data (1D charts)
       if (config.function === 'TIME_SERIES_INTRADAY') {
         const timeSeries = data[`Time Series (${config.interval})`];
+        console.log(`[StockDetailsScreen] Intraday time series key: Time Series (${config.interval})`);
+        console.log(`[StockDetailsScreen] Time series exists: ${!!timeSeries}`);
+        console.log(`[StockDetailsScreen] Time series keys:`, timeSeries ? Object.keys(timeSeries).slice(0, 5) : 'No time series');
+        
         if (timeSeries) {
           prices = Object.values(timeSeries)
             .slice(0, config.dataPoints)  // Limit to requested number of points
@@ -232,9 +244,13 @@ const stockApiService = {
             .filter(price => !isNaN(price));  // Remove invalid prices
         }
       } 
-      // Process daily data (1W, 1M, 3M, 6M, 1Y charts)
+      // Process daily data 
       else {
         const timeSeries = data['Time Series (Daily)'];
+        console.log(`[StockDetailsScreen] Daily time series key: Time Series (Daily)`);
+        console.log(`[StockDetailsScreen] Time series exists: ${!!timeSeries}`);
+        console.log(`[StockDetailsScreen] Time series keys:`, timeSeries ? Object.keys(timeSeries).slice(0, 5) : 'No time series');
+        
         if (timeSeries) {
           prices = Object.values(timeSeries)
             .slice(0, config.dataPoints)  // Limit to requested number of points
@@ -243,28 +259,29 @@ const stockApiService = {
         }
       }
       
-      // Reverse array to show oldest to newest (left to right)
-      return prices.reverse();
+      console.log(`[StockDetailsScreen] Extracted prices count: ${prices.length}`);
+      console.log(`[StockDetailsScreen] First 5 prices:`, prices.slice(0, 5));
+      console.log(`[StockDetailsScreen] Last 5 prices:`, prices.slice(-5));
+      
+      // Reverse array to show oldest to newest
+      const reversedPrices = prices.reverse();
+      console.log(`[StockDetailsScreen] Reversed prices count: ${reversedPrices.length}`);
+      console.log(`[StockDetailsScreen] Final first 5 prices:`, reversedPrices.slice(0, 5));
+      
+      return reversedPrices;
     } catch (error) {
+      console.error(`[StockDetailsScreen] Error fetching chart data:`, error);
       throw new Error(`Failed to fetch chart data: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 };
 
-/**
- * Validates stock symbol format
- * Ensures symbol is 1-5 uppercase letters
- * 
- * @param symbol - Stock symbol to validate
- * @returns True if valid, false otherwise
- */
+ //Validates stock symbol format
 const validateSymbol = (symbol: string): boolean => {
   return /^[A-Z]{1,5}$/.test(symbol);
 };
 
-// ============================================================================
 // MAIN COMPONENT
-// ============================================================================
 
 /**
  * StockDetailsScreen Component
@@ -274,48 +291,26 @@ const validateSymbol = (symbol: string): boolean => {
  * - Interactive price chart with multiple time ranges
  * - Key financial statistics
  * - Company description and tags
- * 
- * Features:
- * - Dynamic chart data loading based on selected time range
- * - Caching for improved performance
- * - Loading and error states
- * - Smooth animations and transitions
- * - Responsive design with theme support
  */
 const StockDetailsScreen: React.FC = React.memo(() => {
   // Get stock symbol from navigation route parameters
   const route = useRoute<RouteProp<ExploreStackParamList, 'StockDetails'>>();
   const { symbol } = route.params;
   
-  // Get current theme for styling
   const { theme } = useTheme();
 
-  // ============================================================================
   // STATE MANAGEMENT
-  // ============================================================================
+  const [details, setDetails] = useState<StockDetails | null>(null);  
+  const [loading, setLoading] = useState(true);                       
+  const [chartData, setChartData] = useState<number[]>([]);           
+  const [selectedRange, setSelectedRange] = useState(2);              
+  const [chartLoading, setChartLoading] = useState(false);            
+  const [error, setError] = useState<string | null>(null);            
   
-  const [details, setDetails] = useState<StockDetails | null>(null);  // Stock overview data
-  const [loading, setLoading] = useState(true);                       // Initial loading state
-  const [chartData, setChartData] = useState<number[]>([]);           // Chart price data
-  const [selectedRange, setSelectedRange] = useState(2);              // Selected time range (default: 1M)
-  const [chartLoading, setChartLoading] = useState(false);            // Chart loading state
-  const [error, setError] = useState<string | null>(null);            // Error state
-  
-  // ============================================================================
+
   // ANIMATION REFERENCES
-  // ============================================================================
-  
-  // Fade-in animation for smooth content appearance
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  // Pulse animation for price change indicator
   const pulseAnim = useRef(new Animated.Value(1)).current;
-  
-  // ============================================================================
-  // MEMOIZED VALUES (Performance optimization)
-  // ============================================================================
-  
-  // Get chart configuration for selected time range
-  const chartConfig = useMemo(() => CHART_CONFIGS[selectedRange], [selectedRange]);
   
   // Get human-readable subtitle for chart
   const chartSubtitle = useMemo(() => TIME_RANGES[selectedRange].value, [selectedRange]);
@@ -328,7 +323,7 @@ const StockDetailsScreen: React.FC = React.memo(() => {
     backgroundColor: theme.cardSecondary,
     backgroundGradientFrom: theme.cardSecondary,
     backgroundGradientTo: theme.cardSecondary,
-    color: (opacity = 1) => `rgba(76, 175, 80, ${opacity})`,  // Green color for positive trend
+    color: (opacity = 1) => `rgba(76, 175, 80, ${opacity})`,  
     labelColor: () => theme.textSecondary,
     propsForDots: { r: '4', strokeWidth: '2', stroke: theme.primary },
     strokeWidth: 3,
@@ -341,68 +336,92 @@ const StockDetailsScreen: React.FC = React.memo(() => {
     fillShadowGradientOpacity: 0.3,
   }), [theme]);
 
-  // ============================================================================
-  // CALLBACK FUNCTIONS (Performance optimization)
-  // ============================================================================
   
-  /**
-   * Fetches chart data for a specific time range
-   * Handles loading states and error handling
-   * 
-   * @param rangeIndex - Index of the selected time range
-   */
+   // Fetches chart data for a specific time range
   const fetchChartData = useCallback(async (rangeIndex: number) => {
+    console.log(`[StockDetailsScreen] fetchChartData callback called with rangeIndex: ${rangeIndex}`);
+    
     // Validate range index
     if (rangeIndex < 0 || rangeIndex >= CHART_CONFIGS.length) {
+      console.error(`[StockDetailsScreen] Invalid range index: ${rangeIndex}, max: ${CHART_CONFIGS.length - 1}`);
       setError('Invalid time range selected');
       return;
     }
     
+    console.log(`[StockDetailsScreen] Setting chart loading to true`);
     setChartLoading(true);
     setError(null);
     
     try {
       const config = CHART_CONFIGS[rangeIndex];
+      console.log(`[StockDetailsScreen] Using chart config:`, config);
+      console.log(`[StockDetailsScreen] Calling stockApiService.fetchChartData for symbol: ${symbol}`);
       const prices = await stockApiService.fetchChartData(symbol, config);
+      console.log(`[StockDetailsScreen] Received chart prices:`, {
+        count: prices.length,
+        first5: prices.slice(0, 5),
+        last5: prices.slice(-5),
+        min: Math.min(...prices),
+        max: Math.max(...prices),
+      });
       setChartData(prices);
+      console.log(`[StockDetailsScreen] Chart data state updated successfully`);
     } catch (error) {
+      console.error(`[StockDetailsScreen] Error in fetchChartData callback:`, error);
       setError(error instanceof Error ? error.message : 'Failed to fetch chart data');
       setChartData([]);
     } finally {
+      console.log(`[StockDetailsScreen] Setting chart loading to false`);
       setChartLoading(false);
     }
   }, [symbol]);
 
-  /**
-   * Handles time range selection
-   * Prevents unnecessary re-fetching if same range is selected
-   * 
-   * @param rangeIndex - Index of the selected time range
-   */
+   // Handles time range selection
   const handleRangeSelection = useCallback((rangeIndex: number) => {
     if (rangeIndex === selectedRange) return; // Prevent unnecessary re-fetch
     setSelectedRange(rangeIndex);
     fetchChartData(rangeIndex);
   }, [fetchChartData, selectedRange]);
-
-  // ============================================================================
-  // EFFECTS (Side effects and lifecycle management)
-  // ============================================================================
   
-  /**
-   * Effect: Fetch stock details on component mount
-   * Also starts animations after data is loaded
-   */
+   // Fetch stock details 
   useEffect(() => {
+    console.log(`[StockDetailsScreen] Component mounted with symbol: ${symbol}`);
+    console.log(`[StockDetailsScreen] Initial loading state: ${loading}`);
+    
     const fetchDetails = async () => {
+      console.log(`[StockDetailsScreen] Starting to fetch details for symbol: ${symbol}`);
       try {
         setError(null);
+        console.log(`[StockDetailsScreen] Calling stockApiService.fetchStockOverview for ${symbol}`);
         const overview = await stockApiService.fetchStockOverview(symbol);
+        console.log(`[StockDetailsScreen] Received overview data:`, {
+          hasSymbol: !!overview.Symbol,
+          hasName: !!overview.Name,
+          symbol: overview.Symbol,
+          name: overview.Name,
+          exchange: overview.Exchange,
+          country: overview.Country,
+          description: overview.Description ? overview.Description.substring(0, 50) + '...' : 'No description',
+          industry: overview.Industry,
+          sector: overview.Sector,
+          '50DayMovingAverage': overview['50DayMovingAverage'],
+          '52WeekLow': overview['52WeekLow'],
+          '52WeekHigh': overview['52WeekHigh'],
+          marketCap: overview.MarketCapitalization,
+          peRatio: overview.PERatio,
+          beta: overview.Beta,
+          dividendYield: overview.DividendYield,
+          profitMargin: overview.ProfitMargin,
+          roe: overview.ReturnOnEquityTTM,
+        });
         setDetails(overview);
+        console.log(`[StockDetailsScreen] Details state updated successfully`);
       } catch (error) {
+        console.error(`[StockDetailsScreen] Error in fetchDetails:`, error);
         setError(error instanceof Error ? error.message : 'Failed to fetch stock details');
         setDetails(null);
       } finally {
+        console.log(`[StockDetailsScreen] Setting loading to false`);
         setLoading(false);
         
         // Start fade-in animation
@@ -433,22 +452,20 @@ const StockDetailsScreen: React.FC = React.memo(() => {
     fetchDetails();
   }, [symbol, fadeAnim, pulseAnim]);
 
-  /**
-   * Effect: Fetch chart data when loading is complete and range changes
-   * Ensures chart data is loaded after stock details are available
-   */
+   // Fetch chart data when loading is complete and range changes
   useEffect(() => {
+    console.log(`[StockDetailsScreen] Chart effect triggered - loading: ${loading}, selectedRange: ${selectedRange}`);
     if (!loading) {
+      console.log(`[StockDetailsScreen] Loading complete, fetching chart data for range: ${selectedRange}`);
       fetchChartData(selectedRange);
+    } else {
+      console.log(`[StockDetailsScreen] Still loading, skipping chart data fetch`);
     }
   }, [loading, selectedRange, fetchChartData]);
 
-  // ============================================================================
-  // RENDER METHODS
-  // ============================================================================
-  
   // Show loading screen while fetching initial data
   if (loading) {
+    console.log(`[StockDetailsScreen] Rendering loading screen for symbol: ${symbol}`);
     return (
       <View style={[styles.loadingContainer, { backgroundColor: theme.background }]}>
         <StatusBar backgroundColor={theme.background} barStyle={theme.text === '#ffffff' ? 'light-content' : 'dark-content'} />
@@ -465,6 +482,8 @@ const StockDetailsScreen: React.FC = React.memo(() => {
 
   // Show error screen if data fetch failed
   if (error || !details?.Symbol) {
+    console.log(`[StockDetailsScreen] Rendering error screen - error: ${error}, hasSymbol: ${!!details?.Symbol}`);
+    console.log(`[StockDetailsScreen] Details object:`, details);
     return (
       <View style={[styles.errorContainer, { backgroundColor: theme.background }]}>
         <StatusBar backgroundColor={theme.background} barStyle={theme.text === '#ffffff' ? 'light-content' : 'dark-content'} />
@@ -480,14 +499,22 @@ const StockDetailsScreen: React.FC = React.memo(() => {
   }
 
   // Main screen content
+  console.log(`[StockDetailsScreen] Rendering main content - details:`, {
+    hasDetails: !!details,
+    symbol: details?.Symbol,
+    name: details?.Name,
+    chartDataLength: chartData.length,
+    selectedRange,
+    chartLoading,
+    error,
+  });
+  
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <StatusBar backgroundColor={theme.background} barStyle={theme.text === '#ffffff' ? 'light-content' : 'dark-content'} />
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <Animated.View style={{ opacity: fadeAnim }}>
-          {/* ============================================================================
-              HEADER SECTION - Company info and current price
-          ============================================================================ */}
+              {/* HEADER SECTION - Company info and current price */}
         <View style={[styles.headerSection, { backgroundColor: theme.card }]}>
             <LinearGradient
               colors={[theme.primaryLight, theme.card]}
@@ -496,7 +523,7 @@ const StockDetailsScreen: React.FC = React.memo(() => {
               end={{ x: 1, y: 1 }}
             >
           <View style={styles.headerRow}>
-                {/* Company logo circle with first letter */}
+                {/* Company logo with first letter */}
                 <View style={[styles.logoCircle, { backgroundColor: theme.primary }]}>
                   <Text style={[styles.symbolLetter, { color: theme.card }]}>
                 {symbol.charAt(0).toUpperCase()}
@@ -538,9 +565,7 @@ const StockDetailsScreen: React.FC = React.memo(() => {
             </LinearGradient>
           </View>
 
-          {/* ============================================================================
-              CHART SECTION - Interactive price chart with time range selector
-          ============================================================================ */}
+          {/* CHART SECTION - Interactive price chart with time range selector */}
         <View style={[styles.chartCard, { backgroundColor: theme.card }]}>
             {/* Chart header with title and subtitle */}
           <View style={styles.chartHeader}>
@@ -558,30 +583,41 @@ const StockDetailsScreen: React.FC = React.memo(() => {
                 </View>
               ) : chartData.length > 0 ? (
                 // Display chart if data is available
-              <LineChart
-                data={{ labels: [], datasets: [{ data: chartData }] }}
-                width={chartWidth}
-                  height={180}
-                  chartConfig={chartConfigMemo}
-                bezier
-                style={styles.chart}
-                  withDots={true}
-                  withShadow={true}
-                  withInnerLines={true}
-                  withOuterLines={false}
-                  decorator={() => (
-                    <View style={styles.chartDecorator}>
-                      <Icon name="trending-up" size={20} color={theme.success} />
-                    </View>
-                  )}
-              />
-            ) : (
+                (() => {
+                  console.log(`[StockDetailsScreen] Rendering chart with ${chartData.length} data points`);
+                  console.log(`[StockDetailsScreen] Chart data:`, chartData);
+                  return (
+                    <LineChart
+                      data={{ labels: [], datasets: [{ data: chartData }] }}
+                      width={chartWidth}
+                      height={180}
+                      chartConfig={chartConfigMemo}
+                      bezier
+                      style={styles.chart}
+                      withDots={true}
+                      withShadow={true}
+                      withInnerLines={true}
+                      withOuterLines={false}
+                      decorator={() => (
+                        <View style={styles.chartDecorator}>
+                          <Icon name="trending-up" size={20} color={theme.success} />
+                        </View>
+                      )}
+                    />
+                  );
+                })()
+              ) : (
                 // Show placeholder when no chart data is available
-              <View style={styles.noChartData}>
-                <Icon name="show-chart" size={48} color={theme.textMuted} />
-                <Text style={[styles.noChartText, { color: theme.textSecondary }]}>Chart data unavailable</Text>
-              </View>
-            )}
+                (() => {
+                  console.log(`[StockDetailsScreen] No chart data available, showing placeholder`);
+                  return (
+                    <View style={styles.noChartData}>
+                      <Icon name="show-chart" size={48} color={theme.textMuted} />
+                      <Text style={[styles.noChartText, { color: theme.textSecondary }]}>Chart data unavailable</Text>
+                    </View>
+                  );
+                })()
+              )}
           </View>
             
             {/* Time range selector buttons */}
@@ -616,9 +652,7 @@ const StockDetailsScreen: React.FC = React.memo(() => {
           </View>
         </View>
 
-          {/* ============================================================================
-              ABOUT AND STATISTICS SECTION - Company info and key metrics
-          ============================================================================ */}
+          {/* ABOUT AND STATISTICS SECTION - Company info and key metrics */}
         <View style={[styles.aboutStatsCard, { backgroundColor: theme.card }]}>
             {/* Company description section */}
           <View style={styles.aboutSection}>
@@ -633,7 +667,7 @@ const StockDetailsScreen: React.FC = React.memo(() => {
                 <View style={[styles.tag, { backgroundColor: theme.primaryLight }]}>
                     <Icon name="business" size={14} color={theme.primary} style={styles.tagIcon} />
                   <Text style={[styles.tagText, { color: theme.primary }]} numberOfLines={1}>
-                      {details.Industry}
+                      Industry - {details.Industry}
                   </Text>
                 </View>
               )}
@@ -641,7 +675,7 @@ const StockDetailsScreen: React.FC = React.memo(() => {
                 <View style={[styles.tag, { backgroundColor: theme.primaryLight }]}>
                     <Icon name="category" size={14} color={theme.primary} style={styles.tagIcon} />
                   <Text style={[styles.tagText, { color: theme.primary }]} numberOfLines={1}>
-                      {details.Sector}
+                      Sector - {details.Sector}
                   </Text>
                 </View>
               )}
@@ -650,7 +684,6 @@ const StockDetailsScreen: React.FC = React.memo(() => {
           
             {/* Key statistics grid */}
           <View style={[styles.statsGrid, { backgroundColor: theme.cardSecondary }]}>
-            <Text style={[styles.statsHeader, { color: theme.text }]}>Key Statistics</Text>
               
               {/* First row: Price ranges */}
             <View style={styles.statsRow}>
@@ -710,20 +743,11 @@ const StockDetailsScreen: React.FC = React.memo(() => {
               </View>
             </View>
           </View>
-
-          {/* Floating Action Button - Add to watchlist */}
-          <TouchableOpacity style={[styles.fab, { backgroundColor: theme.primary }]}>
-            <Icon name="add" size={24} color={theme.card} />
-          </TouchableOpacity>
         </Animated.View>
       </ScrollView>
     </View>
   );
 });
-
-// ============================================================================
-// STYLES
-// ============================================================================
 
 const styles = StyleSheet.create({
   // Main container styles
@@ -1057,23 +1081,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-  },
-  
-  // Floating action button styles
-  fab: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
   },
   
   // Chart loading styles

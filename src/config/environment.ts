@@ -1,7 +1,8 @@
 // Environment configuration for the app
 export const ENV = {
   // API Configuration
-  ALPHA_VANTAGE_API_KEY: process.env.ALPHA_VANTAGE_API_KEY || 'demo',
+  // ALPHA_VANTAGE_API_KEY: 'V4EDSIW3Z32CRZUC',
+  ALPHA_VANTAGE_API_KEY: process.env.ALPHA_VANTAGE_API_KEY || 'demo', 
   
   // App Configuration
   APP_NAME: process.env.APP_NAME || 'GrowAssignment',

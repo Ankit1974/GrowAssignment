@@ -8,6 +8,7 @@ import StockCard from '../components/StockCard';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { debounce, measurePerformance, PERFORMANCE_CONFIG } from '../utils/performance';
 import { apiService } from '../services/api';
+import { ENV } from '../config/environment';
 
 
 
@@ -58,6 +59,10 @@ const ExploreScreen = () => {
       setError(null);
       setLoading(true);
       
+      // Check if API key is set
+      if (!ENV.ALPHA_VANTAGE_API_KEY || ENV.ALPHA_VANTAGE_API_KEY === 'YOUR_API_KEY_HERE') {
+        throw new Error('Please set your Alpha Vantage API key in src/config/environment.ts');
+      }
      
       const measureFetch = measurePerformance('fetchTopGainersLosers', async () => {
         // Fetch both gainers and losers in parallel 
@@ -146,7 +151,7 @@ const ExploreScreen = () => {
       // Fetch additional results from API for broader search
       let apiResults: HybridSearchResult[] = [];
       try {
-        const res = await fetch(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${encodeURIComponent(query)}&apikey=demo`);
+        const res = await fetch(`https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${encodeURIComponent(query)}&apikey=${ENV.ALPHA_VANTAGE_API_KEY}`);
         const data = await res.json();
         apiResults = (data.bestMatches || []).map((item: any) => ({
           symbol: item["1. symbol"],
@@ -287,6 +292,27 @@ const ExploreScreen = () => {
       <Text style={[styles.errorText, { color: theme.text }]}>
         {error || 'Something went wrong'}
       </Text>
+      
+      {/* Show additional help for API key issues */}
+      {error && error.includes('API key') && (
+        <View style={styles.apiKeyHelp}>
+          <Text style={[styles.apiKeyHelpText, { color: theme.textSecondary }]}>
+            1. Get a free API key from Alpha Vantage{'\n'}
+            2. Replace 'YOUR_API_KEY_HERE' in src/config/environment.ts{'\n'}
+            3. Restart the app
+          </Text>
+          <TouchableOpacity 
+            style={[styles.apiKeyButton, { backgroundColor: theme.primary }]}
+            onPress={() => {
+              // You could add a link to open the website here
+              console.log('Visit: https://www.alphavantage.co/support/#api-key');
+            }}
+          >
+            <Text style={styles.apiKeyButtonText}>Get API Key</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      
       <TouchableOpacity style={[styles.retryButton, { backgroundColor: theme.primary }]} onPress={handleRetry}>
         <Text style={styles.retryButtonText}>Retry</Text>
       </TouchableOpacity>
@@ -566,6 +592,29 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
+  },
+  
+  // API Key help styles
+  apiKeyHelp: {
+    marginTop: 16,
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  apiKeyHelpText: {
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  apiKeyButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 6,
+  },
+  apiKeyButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
   
   // Horizontal scroll 
