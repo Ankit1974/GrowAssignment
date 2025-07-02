@@ -8,6 +8,7 @@ import { useTheme } from '../ThemeContext';
 import { ExploreStackParamList } from '../types/navigation';
 import LinearGradient from 'react-native-linear-gradient';
 import { ENV } from '../config/environment';
+import { responsive, borderRadius, fontSize, device } from '../utils/responsive';
 
 
 
@@ -316,7 +317,7 @@ const StockDetailsScreen: React.FC = React.memo(() => {
   const chartSubtitle = useMemo(() => TIME_RANGES[selectedRange].value, [selectedRange]);
   
   // Calculate chart width based on screen dimensions
-  const chartWidth = useMemo(() => Dimensions.get('window').width - 48, []);
+  const chartWidth = useMemo(() => device.screenWidth - responsive.margin.xl, []);
   
   // Chart styling configuration based on current theme
   const chartConfigMemo = useMemo(() => ({

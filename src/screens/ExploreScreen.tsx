@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { debounce, measurePerformance, PERFORMANCE_CONFIG } from '../utils/performance';
 import { apiService } from '../services/api';
 import { ENV } from '../config/environment';
+import { responsive, device, borderRadius, fontSize } from '../utils/responsive';
 
 
 
@@ -323,13 +324,13 @@ const ExploreScreen = () => {
     <View style={{ flex: 1, backgroundColor: theme.background }}>
       <Text
         style={{
-          fontSize: 24,
+          fontSize: theme.fontSize.xxxl,
           fontWeight: 'bold',
           color: theme.text,
           alignSelf: 'flex-start',
-          marginLeft: 20,
-          marginTop: 24,
-          marginBottom: 8,
+          marginLeft: responsive.margin.lg,
+          marginTop: responsive.margin.lg,
+          marginBottom: responsive.margin.sm,
         }}
       >
         Stocks App
@@ -458,75 +459,75 @@ const styles = StyleSheet.create({
   
   // Search bar
   searchContainer: {
-    marginHorizontal: 16,
+    marginHorizontal: responsive.margin.md,
   },
   searchBarContainer: {
-    paddingHorizontal: 18,
-    paddingVertical: 10,
+    paddingHorizontal: responsive.padding.lg,
+    paddingVertical: responsive.padding.sm,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: borderRadius.md,
     flexDirection: 'row',
     alignItems: 'center',
   },
   searchIcon: {
-    marginRight: 10,
+    marginRight: responsive.margin.sm,
   },
   searchBar: {
     flex: 1,
     fontSize: 16,
   },
   micIcon: {
-    marginLeft: 10,
+    marginLeft: responsive.margin.sm,
   },
   
   // Search results 
   searchResultsBox: {
     backgroundColor: '#fff',
-    borderRadius: 12,
-    marginTop: 4,
-    marginHorizontal: 2,
+    borderRadius: borderRadius.lg,
+    marginTop: responsive.margin.xs,
+    marginHorizontal: responsive.margin.xs,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
-    shadowRadius: 8,
+    shadowRadius: responsive.margin.md,
     elevation: 6,
     zIndex: 10,
   },
   searchResultRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 14,
-    paddingHorizontal: 16,
+    paddingVertical: responsive.padding.md,
+    paddingHorizontal: responsive.padding.md,
     backgroundColor: '#fff',
   },
   searchResultSymbol: {
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: fontSize.lg,
     width: 70,
   },
   searchResultName: {
     flex: 1,
-    fontSize: 16,
+    fontSize: fontSize.md,
     color: '#222',
   },
   searchResultDivider: {
     height: 1,
     backgroundColor: '#eee',
-    marginLeft: 16,
+    marginLeft: responsive.margin.md,
   },
   searchResultEmpty: {
-    padding: 16,
+    padding: responsive.padding.md,
     color: '#888',
     textAlign: 'center',
   },
   
   // Section header 
   sectionHeaderBox: {
-    borderRadius: 8,
-    marginHorizontal: 16,
-    marginTop: 18,
-    marginBottom: 8,
-    padding: 12,
+    borderRadius: borderRadius.md,
+    marginHorizontal: responsive.margin.md,
+    marginTop: responsive.margin.lg,
+    marginBottom: responsive.margin.sm,
+    padding: responsive.padding.md,
   },
   sectionHeaderRowCustom: {
     flexDirection: 'row',
@@ -543,10 +544,10 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginRight: responsive.margin.sm,
   },
   sectionTitleCustom: {
-    fontSize: 18,
+    fontSize: fontSize.lg,
     fontWeight: 'bold',
   },
   viewAllRowCustom: {
@@ -555,8 +556,8 @@ const styles = StyleSheet.create({
   },
   viewAllCustom: {
     fontWeight: 'bold',
-    fontSize: 15,
-    marginRight: 2,
+    fontSize: fontSize.sm,
+    marginRight: responsive.margin.xs,
   },
   
   // Loading and error states
@@ -564,75 +565,75 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: responsive.padding.xl,
   },
   loadingText: {
-    marginTop: 12,
-    fontSize: 16,
+    marginTop: responsive.margin.md,
+    fontSize: fontSize.md,
     textAlign: 'center',
   },
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingVertical: responsive.padding.xl,
   },
   errorText: {
-    marginTop: 12,
-    fontSize: 16,
+    marginTop: responsive.margin.md,
+    fontSize: fontSize.md,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: responsive.margin.lg,
   },
   retryButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
+    paddingHorizontal: responsive.padding.lg,
+    paddingVertical: responsive.padding.md,
+    borderRadius: borderRadius.md,
   },
   retryButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: fontSize.md,
   },
   
   // API Key help styles
   apiKeyHelp: {
-    marginTop: 16,
-    marginBottom: 20,
+    marginTop: responsive.margin.md,
+    marginBottom: responsive.margin.lg,
     alignItems: 'center',
   },
   apiKeyHelpText: {
-    fontSize: 14,
+    fontSize: fontSize.sm,
     textAlign: 'center',
     lineHeight: 20,
-    marginBottom: 12,
+    marginBottom: responsive.margin.md,
   },
   apiKeyButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 6,
+    paddingHorizontal: responsive.padding.lg,
+    paddingVertical: responsive.padding.sm,
+    borderRadius: borderRadius.sm,
   },
   apiKeyButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: fontSize.sm,
   },
   
   // Horizontal scroll 
   horizontalScroll: {
-    paddingLeft: 8,
-    paddingRight: 8,
+    paddingLeft: responsive.padding.sm,
+    paddingRight: responsive.padding.sm,
   },
   cardPage: {
-    width: 370,
+    width: device.isTablet ? 600 : 370,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginRight: 28,
-    marginLeft: 5
+    marginRight: responsive.margin.xl,
+    marginLeft: responsive.margin.xs
   },
   cardContainer: {
-    width: '50%',
-    paddingHorizontal: 22,
-    paddingVertical: 4,
+    width: device.isTablet ? '33%' : '50%',
+    paddingHorizontal: responsive.padding.lg,
+    paddingVertical: responsive.padding.xs,
   },
 });
 

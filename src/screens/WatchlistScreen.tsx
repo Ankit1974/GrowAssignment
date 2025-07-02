@@ -7,6 +7,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { WatchlistStackParamList } from '../types/navigation';
 import { useTheme } from '../ThemeContext';
 import { PERFORMANCE_CONFIG, getItemLayout } from '../utils/performance';
+import { responsive, borderRadius, fontSize } from '../utils/responsive';
 
 // Storage key for saving/loading watchlists from device storage
 const STORAGE_KEY = 'watchlists';
@@ -151,31 +152,31 @@ const styles = StyleSheet.create({
   // Main container
   container: { 
     flex: 1, 
-    paddingTop: 24
+    paddingTop: responsive.margin.lg
   },
   
   // Container for the FlatList 
   listContainer: {
-    paddingHorizontal: 16, 
-    paddingBottom: 20,
+    paddingHorizontal: responsive.margin.md, 
+    paddingBottom: responsive.margin.lg,
   },
   
   // Individual watchlist row
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 16,
+    paddingVertical: responsive.padding.md,
+    paddingHorizontal: responsive.padding.md,
     justifyContent: 'space-between',
-    borderRadius: 12, 
-    marginVertical: 4, 
+    borderRadius: borderRadius.lg, 
+    marginVertical: responsive.margin.xs, 
     borderLeftWidth: 4, 
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: responsive.margin.xs,
     elevation: 3, 
     height: 80,
   },
@@ -194,12 +195,12 @@ const styles = StyleSheet.create({
     borderRadius: 18, 
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12, 
+    marginRight: responsive.margin.md, 
   },
   
   // Watchlist name text
   name: { 
-    fontSize: 16,
+    fontSize: fontSize.md,
     fontWeight: '500', 
     flex: 1,
   },
@@ -207,15 +208,15 @@ const styles = StyleSheet.create({
   // Separator line between items
   separator: { 
     height: 1, 
-    marginLeft: 16,
-    marginRight: 16,
+    marginLeft: responsive.margin.md,
+    marginRight: responsive.margin.md,
   },
   
   // Container for empty state
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 60,
+    paddingVertical: responsive.padding.xl,
   },
   
   // Circular container for empty state icon
@@ -225,12 +226,12 @@ const styles = StyleSheet.create({
     borderRadius: 40, 
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginBottom: responsive.margin.md,
   },
   
   // Empty state text 
   empty: { 
-    fontSize: 16,
+    fontSize: fontSize.md,
     textAlign: 'center',
   },
 });

@@ -1,3 +1,5 @@
+import { spacing, fontSize, borderRadius } from './utils/responsive';
+
 export const lightTheme = {
   background: '#f8f9fa',
   card: '#ffffff',
@@ -16,7 +18,10 @@ export const lightTheme = {
   warningLight: '#fff3cd',
   shadow: '#e0e0e0',
   elevation: 4,
-  borderRadius: 12,
+  // Responsive spacing
+  spacing,
+  fontSize,
+  borderRadius,
 };
 
 export const darkTheme = {
@@ -37,7 +42,10 @@ export const darkTheme = {
   warningLight: '#3a2a1b',
   shadow: '#000000',
   elevation: 8,
-  borderRadius: 12,
+  // Responsive spacing
+  spacing,
+  fontSize,
+  borderRadius,
 };
 
 export type Theme = typeof lightTheme;

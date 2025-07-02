@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../ThemeContext';
 import { ExploreStackParamList } from '../types/navigation';
+import { responsive, borderRadius, fontSize } from '../utils/responsive';
 
 // Props interface for the StockCard component
 interface StockCardProps {
@@ -134,9 +135,9 @@ const styles = StyleSheet.create({
   // Main card container
   card: {
     flex: 1,
-    padding: 16,
+    padding: responsive.padding.md,
     borderWidth: 1,
-    borderRadius: 16,
+    borderRadius: borderRadius.xl,
     minHeight: 120,
     position: 'relative',
     overflow: 'hidden',
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
       height: 4,
     },
     shadowOpacity: 0.15,
-    shadowRadius: 8,
+    shadowRadius: responsive.margin.md,
     elevation: 6,
   },
   
@@ -162,8 +163,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
-    marginTop: 4,
+    marginBottom: responsive.margin.md,
+    marginTop: responsive.margin.xs,
   },
   
   // Circular container for company initial
@@ -171,7 +172,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    marginRight: 12,
+    marginRight: responsive.margin.md,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -179,13 +180,13 @@ const styles = StyleSheet.create({
   // Stock symbol text 
   symbol: {
     fontWeight: '700',
-    fontSize: 16,
+    fontSize: fontSize.md,
     flex: 1,
   },
 
   // Company initial text inside circle
   circleLetter: {
-    fontSize: 18,
+    fontSize: fontSize.lg,
     fontWeight: 'bold',
   },
 
@@ -197,34 +198,34 @@ const styles = StyleSheet.create({
 
   // Price text
   price: {
-    fontSize: 20,
+    fontSize: fontSize.xl,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: responsive.margin.sm,
   },
 
   // Change information container
   changeContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: responsive.margin.sm,
   },
 
   // Change badge
   changeBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
+    paddingHorizontal: responsive.padding.sm,
+    paddingVertical: responsive.padding.xs,
+    borderRadius: borderRadius.md,
   },
 
   // Change amount text
   changeAmount: {
-    fontSize: 12,
+    fontSize: fontSize.xs,
     fontWeight: '600',
   },
 
   // Change percentage text
   changePercentage: {
-    fontSize: 12,
+    fontSize: fontSize.xs,
     fontWeight: '600',
   },
 

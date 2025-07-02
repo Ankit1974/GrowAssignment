@@ -14,15 +14,16 @@ import { useTheme } from '../ThemeContext';
 import { StockItem } from '../services/api';
 import { useTopGainers } from '../hooks/useStockData';
 import { PERFORMANCE_CONFIG, getItemLayout } from '../utils/performance';
+import { responsive, borderRadius, fontSize, device } from '../utils/responsive';
 
 // control the layout, spacing, and visual
 const CONSTANTS = {
-  GRID_COLUMNS: 2, 
+  GRID_COLUMNS: device.isTablet ? 3 : 2, 
   REFRESH_COLORS: ['#4CAF50', '#2196F3'] as string[], 
   REFRESH_TINT_COLOR: '#4CAF50',
   MIN_HEIGHT: 300, 
-  CARD_SPACING: 8, 
-  ROW_SPACING: 12, 
+  CARD_SPACING: responsive.margin.sm, 
+  ROW_SPACING: responsive.margin.md, 
   CARD_HEIGHT: 140, 
 } as const;
 
